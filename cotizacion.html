@@ -42,6 +42,58 @@
 </div>
 
 <main class="page">
+    <section class="line-finder" aria-labelledby="line-finder-title">
+        <div class="home-section-heading">
+            <div>
+                <span class="home-eyebrow">TE AYUDAMOS A ELEGIR</span>
+                <h2 id="line-finder-title">Encuentra la línea ideal para tu equipo</h2>
+                <p class="line-finder-intro">Cuéntanos qué deporte practican y qué buscan en su uniforme.</p>
+            </div>
+        </div>
+
+        <form class="line-finder-form" id="line-finder-form">
+            <label for="finder-sport">
+                ¿Qué deporte practican?
+                <select id="finder-sport" required>
+                    <option value="Fútbol">Fútbol</option>
+                    <option value="Baloncesto">Baloncesto</option>
+                    <option value="Voleibol">Voleibol</option>
+                    <option value="Béisbol">Béisbol</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </label>
+
+            <label for="finder-priority">
+                ¿Qué es más importante para ustedes?
+                <select id="finder-priority" required>
+                    <option value="basicos">Una opción esencial y funcional</option>
+                    <option value="pro">Un acabado premium</option>
+                    <option value="doble-faz">Tener dos estilos en una prenda</option>
+                </select>
+            </label>
+
+            <div class="finder-quantity-field">
+                <label for="finder-quantity">¿Cuántos uniformes necesitan?</label>
+                <div class="quote-quantity-stepper">
+                    <button class="quote-quantity-button" id="finder-quantity-decrease" type="button" aria-label="Restar un uniforme">−</button>
+                    <input id="finder-quantity" type="number" min="6" max="500" step="1" value="6" required inputmode="numeric">
+                    <button class="quote-quantity-button" id="finder-quantity-increase" type="button" aria-label="Agregar un uniforme">+</button>
+                </div>
+            </div>
+
+            <button class="line-finder-submit" type="submit">ENCONTRAR MI LÍNEA</button>
+        </form>
+
+        <div class="line-finder-result" id="line-finder-result" aria-live="polite" hidden>
+            <div>
+                <span class="line-finder-result-label">NUESTRA SUGERENCIA</span>
+                <h3 id="line-finder-result-title"></h3>
+                <p id="line-finder-result-description"></p>
+            </div>
+            <button class="line-finder-apply" id="line-finder-apply" type="button">USAR ESTA OPCIÓN EN LA CALCULADORA</button>
+        </div>
+    </section>
+
     <section class="quick-quote" aria-labelledby="calculadora-titulo">
         <div class="home-section-heading">
             <div>
@@ -164,71 +216,6 @@
             <p class="quote-comparison-note">Los valores son aproximados, no incluyen envío y aplican al pedido mínimo de 6 uniformes. El precio final se confirma por WhatsApp.</p>
         </section>
 
-        <section class="uniform-configurator" aria-labelledby="uniform-configurator-title">
-            <div class="quote-comparison-heading">
-                <div>
-                    <span class="home-eyebrow">PERSONALIZA TU IDEA</span>
-                    <h2 id="uniform-configurator-title">Dale color a tu uniforme</h2>
-                </div>
-                <p>Prueba una combinación y envíala para cotizar.</p>
-            </div>
-
-            <div class="uniform-configurator-grid">
-                <div class="uniform-configurator-controls">
-                    <label for="config-sport">
-                        Deporte
-                        <select id="config-sport">
-                            <option>Fútbol</option>
-                            <option>Fútbol sala</option>
-                            <option>Baloncesto</option>
-                            <option>Voleibol</option>
-                            <option>Otro</option>
-                        </select>
-                    </label>
-
-                    <div class="uniform-color-controls">
-                        <label for="config-primary">
-                            Color principal
-                            <span class="uniform-color-input">
-                                <input id="config-primary" type="color" value="#ffde00">
-                                <output id="config-primary-value" for="config-primary">#FFDE00</output>
-                            </span>
-                        </label>
-                        <label for="config-accent">
-                            Color de acento
-                            <span class="uniform-color-input">
-                                <input id="config-accent" type="color" value="#111111">
-                                <output id="config-accent-value" for="config-accent">#111111</output>
-                            </span>
-                        </label>
-                    </div>
-
-                    <p class="uniform-configurator-note">Vista referencial para explorar colores. El diseño final se prepara y aprueba antes de producir.</p>
-                </div>
-
-                <div class="uniform-preview" id="uniform-preview" aria-label="Vista previa del uniforme">
-                    <div class="uniform-preview-labels">
-                        <strong id="config-sport-display">Fútbol</strong>
-                        <span>VISTA REFERENCIAL</span>
-                    </div>
-                    <svg class="uniform-preview-shirt" viewBox="0 0 320 320" role="img" aria-labelledby="shirt-title shirt-description">
-                        <title id="shirt-title">Vista previa de camiseta deportiva</title>
-                        <desc id="shirt-description">Camiseta con los colores principal y de acento seleccionados</desc>
-                        <path class="jersey-main" d="M111 42 79 48 36 78l21 45 29-15v164h148V108l29 15 21-45-43-30-32-6c-11 16-27 24-49 24s-38-8-49-24Z"/>
-                        <path class="jersey-accent" d="m79 48-43 30 21 45 29-15 17-11-18-49Zm162 0 43 30-21 45-29-15-17-11 18-49ZM86 250h148v22H86z"/>
-                        <path class="jersey-trim" d="M111 42c11 16 27 24 49 24s38-8 49-24l-13-3c-8 11-20 17-36 17s-28-6-36-17Z"/>
-                        <path class="jersey-outline" d="M111 42 79 48 36 78l21 45 29-15v164h148V108l29 15 21-45-43-30-32-6c-11 16-27 24-49 24s-38-8-49-24Z"/>
-                        <text class="jersey-mark" x="160" y="156" text-anchor="middle">YASA</text>
-                        <text class="jersey-number" x="160" y="220" text-anchor="middle">10</text>
-                    </svg>
-                </div>
-            </div>
-
-            <a class="btn-whatsapp uniform-configurator-cta" id="config-whatsapp" href="https://wa.me/573238382435/" target="_blank" rel="noopener noreferrer">
-                COTIZAR ESTA IDEA POR WHATSAPP
-            </a>
-        </section>
-
         <p class="quick-quote-disclaimer">Estimación informativa. No incluye envío, el cual se cotiza según el destino. El pedido mínimo es de 6 uniformes.</p>
     </section>
 
@@ -296,14 +283,20 @@ const quoteLine = document.getElementById("quote-line");
 const quoteQuantity = document.getElementById("quote-quantity");
 const quoteNeon = document.getElementById("quote-neon");
 const quoteCity = document.getElementById("quote-city");
-const configSport = document.getElementById("config-sport");
-const configPrimary = document.getElementById("config-primary");
-const configAccent = document.getElementById("config-accent");
-const uniformPreview = document.getElementById("uniform-preview");
+const quoteDetail = document.getElementById("quote-detail");
 const decreaseQuantity = document.getElementById("quote-quantity-decrease");
 const increaseQuantity = document.getElementById("quote-quantity-increase");
 const quoteDownload = document.getElementById("quote-download");
 const quoteDownloadStatus = document.getElementById("quote-download-status");
+const finderForm = document.getElementById("line-finder-form");
+const finderSport = document.getElementById("finder-sport");
+const finderPriority = document.getElementById("finder-priority");
+const finderQuantity = document.getElementById("finder-quantity");
+const finderDecrease = document.getElementById("finder-quantity-decrease");
+const finderIncrease = document.getElementById("finder-quantity-increase");
+const finderResult = document.getElementById("line-finder-result");
+let quoteSport = "";
+let pendingRecommendation = null;
 
 function formatCop(value) {
     return new Intl.NumberFormat("es-CO", {
@@ -334,19 +327,21 @@ function actualizarCotizacionRapida() {
     const deposit = Math.ceil(total / 2);
     const balance = total - deposit;
     const neonText = quoteNeon.checked ? "Con estilo neón" : "Sin neón";
+    const sportSuffix = quoteSport ? ` · ${quoteSport}` : "";
 
     document.getElementById("quote-total").textContent = formatCop(total);
-    document.getElementById("quote-detail").textContent = `${quantity} uniformes ${line.name} · ${neonText}`;
+    quoteDetail.textContent = `${quantity} uniformes ${line.name}${sportSuffix} · ${neonText}`;
     document.getElementById("quote-deposit").textContent = formatCop(deposit);
     document.getElementById("quote-balance").textContent = formatCop(balance);
 
     const city = quoteCity.value.trim();
     const destination = city || "Por indicar";
-    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
+    const sportDescription = quoteSport ? ` para ${quoteSport}` : "";
+    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name}${sportDescription} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
     document.getElementById("quote-whatsapp").href =
         `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
 
-    document.getElementById("summary-line").textContent = `${quantity} uniformes ${line.name}`;
+    document.getElementById("summary-line").textContent = `${quantity} uniformes ${line.name}${sportSuffix}`;
     document.getElementById("summary-unit-price").textContent = formatCop(unitPrice);
     document.getElementById("summary-neon").textContent = quoteNeon.checked ? "Sí" : "No";
     document.getElementById("summary-total").textContent = formatCop(total);
@@ -363,39 +358,77 @@ function actualizarCotizacionRapida() {
         document.getElementById(`comparison-${key}-unit`).textContent =
             `${formatCop(comparisonUnitPrice)} por uniforme`;
     });
-
-    actualizarConfigurador();
 }
 
-function actualizarConfigurador() {
-    const primaryColor = configPrimary.value.toUpperCase();
-    const accentColor = configAccent.value.toUpperCase();
-    const line = quoteLines[quoteLine.value];
-    const quantity = Number.parseInt(quoteQuantity.value, 10);
-    const unitPrice = line.price + (quoteNeon.checked ? line.neon : 0);
-    const total = unitPrice * quantity;
-    const sport = configSport.value;
-
-    uniformPreview.style.setProperty("--uniform-primary", primaryColor);
-    uniformPreview.style.setProperty("--uniform-accent", accentColor);
-    document.getElementById("config-sport-display").textContent = sport;
-    document.getElementById("config-primary-value").textContent = primaryColor;
-    document.getElementById("config-accent-value").textContent = accentColor;
-
-    const city = quoteCity.value.trim() || "Por indicar";
-    const neonDescription = quoteNeon.checked ? "con estilo neón" : "sin estilo neón";
-    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name} para ${sport}, ${neonDescription}. Colores elegidos: principal ${primaryColor} y acento ${accentColor}. Estimado de los uniformes: ${formatCop(total)}. Ciudad o municipio: ${city}. Entiendo que el envío se cotiza aparte y que la vista de colores es referencial.`;
-    document.getElementById("config-whatsapp").href =
-        `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
+function actualizarControlesRecomendador() {
+    const quantity = Number.parseInt(finderQuantity.value, 10);
+    finderDecrease.disabled = !Number.isInteger(quantity) || quantity <= 6;
+    finderIncrease.disabled = !Number.isInteger(quantity) || quantity >= 500;
 }
+
+function invalidarRecomendacion() {
+    pendingRecommendation = null;
+    finderResult.hidden = true;
+}
+
+finderForm.addEventListener("input", function () {
+    invalidarRecomendacion();
+    actualizarControlesRecomendador();
+});
+finderForm.addEventListener("change", invalidarRecomendacion);
+finderForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (!finderQuantity.reportValidity()) return;
+
+    const lineKey = finderPriority.value;
+    const line = quoteLines[lineKey];
+    const descriptions = {
+        basicos: "Básicos ofrece una opción esencial y funcional para vestir a tu equipo.",
+        pro: "Pro destaca por su tela texturizada y un acabado de presencia premium.",
+        "doble-faz": "Doble-faz ofrece dos estilos en una misma prenda para mayor versatilidad."
+    };
+
+    pendingRecommendation = {
+        lineKey: lineKey,
+        quantity: Number.parseInt(finderQuantity.value, 10),
+        sport: finderSport.value
+    };
+    document.getElementById("line-finder-result-title").textContent =
+        `${line.name} puede ser una buena opción para ${pendingRecommendation.sport}`;
+    document.getElementById("line-finder-result-description").textContent =
+        `${descriptions[lineKey]} Recomendado para un pedido de ${pendingRecommendation.quantity} uniformes.`;
+    finderResult.hidden = false;
+});
+
+document.getElementById("line-finder-apply").addEventListener("click", function () {
+    if (!pendingRecommendation) return;
+
+    quoteLine.value = pendingRecommendation.lineKey;
+    quoteQuantity.value = String(pendingRecommendation.quantity);
+    quoteSport = pendingRecommendation.sport;
+    actualizarCotizacionRapida();
+    document.querySelector(".quick-quote").scrollIntoView({ behavior: "smooth", block: "start" });
+    quoteLine.focus({ preventScroll: true });
+});
+
+finderQuantity.addEventListener("input", actualizarControlesRecomendador);
+finderDecrease.addEventListener("click", function () {
+    const quantity = Number.parseInt(finderQuantity.value, 10);
+    finderQuantity.value = String(Math.max(6, (Number.isInteger(quantity) ? quantity : 6) - 1));
+    invalidarRecomendacion();
+    actualizarControlesRecomendador();
+});
+finderIncrease.addEventListener("click", function () {
+    const quantity = Number.parseInt(finderQuantity.value, 10);
+    finderQuantity.value = String(Math.min(500, (Number.isInteger(quantity) ? quantity : 6) + 1));
+    invalidarRecomendacion();
+    actualizarControlesRecomendador();
+});
 
 quoteLine.addEventListener("change", actualizarCotizacionRapida);
 quoteQuantity.addEventListener("input", actualizarCotizacionRapida);
 quoteNeon.addEventListener("change", actualizarCotizacionRapida);
 quoteCity.addEventListener("input", actualizarCotizacionRapida);
-configSport.addEventListener("change", actualizarConfigurador);
-configPrimary.addEventListener("input", actualizarConfigurador);
-configAccent.addEventListener("input", actualizarConfigurador);
 decreaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) - 1);
     actualizarCotizacionRapida();
@@ -404,6 +437,7 @@ increaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) + 1);
     actualizarCotizacionRapida();
 });
+actualizarControlesRecomendador();
 quoteDownload.addEventListener("click", async function () {
     try {
         const canvas = document.createElement("canvas");
