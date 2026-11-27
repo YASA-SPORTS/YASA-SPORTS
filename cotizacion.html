@@ -122,10 +122,9 @@
             </dl>
             <p class="quote-summary-shipping">El envío no está incluido; YASA lo cotizará según el destino.</p>
             <div class="quote-summary-actions">
-                <button class="quote-share-button" id="quote-share" type="button">COMPARTIR COMO MENSAJE</button>
                 <button class="quote-download-button" id="quote-download" type="button">DESCARGAR COMO IMAGEN</button>
             </div>
-            <p class="quote-share-status" id="quote-share-status" role="status" aria-live="polite"></p>
+            <p class="quote-share-status" id="quote-download-status" role="status" aria-live="polite"></p>
         </section>
 
         <section class="quote-comparison" aria-labelledby="quote-comparison-title">
@@ -234,9 +233,8 @@ const quoteNeon = document.getElementById("quote-neon");
 const quoteCity = document.getElementById("quote-city");
 const decreaseQuantity = document.getElementById("quote-quantity-decrease");
 const increaseQuantity = document.getElementById("quote-quantity-increase");
-const quoteShare = document.getElementById("quote-share");
 const quoteDownload = document.getElementById("quote-download");
-const quoteShareStatus = document.getElementById("quote-share-status");
+const quoteDownloadStatus = document.getElementById("quote-download-status");
 
 function formatCop(value) {
     return new Intl.NumberFormat("es-CO", {
@@ -297,7 +295,6 @@ function actualizarCotizacionRapida() {
             `${formatCop(comparisonUnitPrice)} por uniforme`;
     });
 
-    quoteShare.dataset.message = message;
 }
 
 quoteLine.addEventListener("change", actualizarCotizacionRapida);
@@ -312,26 +309,6 @@ increaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) + 1);
     actualizarCotizacionRapida();
 });
-quoteShare.addEventListener("click", async function () {
-    try {
-        if (navigator.share) {
-            await navigator.share({
-                title: "Resumen de cotización YASA SPORTS",
-                text: quoteShare.dataset.message
-            });
-        } else if (navigator.clipboard) {
-            await navigator.clipboard.writeText(quoteShare.dataset.message);
-            quoteShareStatus.textContent = "Resumen copiado. Ya puedes pegarlo para compartirlo.";
-        } else {
-            quoteShareStatus.textContent = "Este navegador no permite compartir ni copiar automáticamente. Usa el botón de WhatsApp para enviar tu cotización.";
-        }
-    } catch (error) {
-        if (error.name !== "AbortError") {
-            quoteShareStatus.textContent = "No se pudo compartir automáticamente. Usa el botón de WhatsApp para enviar tu cotización.";
-        }
-    }
-});
-
 quoteDownload.addEventListener("click", async function () {
     try {
         const canvas = document.createElement("canvas");
@@ -430,9 +407,9 @@ quoteDownload.addEventListener("click", async function () {
         window.setTimeout(function () {
             URL.revokeObjectURL(imageUrl);
         }, 1000);
-        quoteShareStatus.textContent = "Imagen del resumen descargada.";
+        quoteDownloadStatus.textContent = "Imagen del resumen descargada.";
     } catch (error) {
-        quoteShareStatus.textContent = "No se pudo descargar la imagen del resumen. Puedes compartirlo como mensaje.";
+        quoteDownloadStatus.textContent = "No se pudo descargar la imagen del resumen. Revisa los permisos del navegador e inténtalo de nuevo.";
     }
 });
 actualizarCotizacionRapida();
