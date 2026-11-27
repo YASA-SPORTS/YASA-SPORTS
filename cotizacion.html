@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conoce cómo cotizar, los plazos de producción, pagos, envíos y garantía de YASA SPORTS.">
+    <title>YASA SPORTS - COTIZACIÓN</title>
+    <script src="tema.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<aside class="sidebar">
+    <a class="sidebar-brand" href="index.html" aria-label="Ir al inicio de YASA SPORTS">
+        <img src="logo-yasa.jpeg" alt="YASA SPORTS">
+    </a>
+    <nav class="sidebar-nav" aria-label="Menú principal">
+        <a href="index.html">Inicio</a>
+        <a href="basicos.html">Básicos</a>
+        <a href="pro.html">Pro</a>
+        <a href="doble-faz.html">Doble-faz</a>
+        <a href="neon.html">Neón</a>
+        <a class="active" href="cotizacion.html" aria-current="page">Cotización</a>
+        <a href="novedades.html">Novedades</a>
+        <a href="pruebas.html">Pruebas</a>
+        <a href="sublimacion.html">Sublimación</a>
+        <a href="catalogo.html">Catálogo</a>
+    </nav>
+    <div class="sidebar-social" aria-label="Redes sociales">
+        <a href="https://www.tiktok.com/@yasa.sports" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="tiktok.jpeg" alt="TikTok"></a>
+        <a href="https://web.facebook.com/amfuniformes?locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="facebook.jpeg" alt="Facebook"></a>
+        <a href="https://www.instagram.com/sportsyasa/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="instagram.jpeg" alt="Instagram"></a>
+        <a class="sidebar-whatsapp" href="https://wa.me/573238382435" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+    </div>
+</aside>
+
+<div class="site-content">
+<div class="page-tools">
+    <div class="local-clock" aria-live="polite">
+        <span id="hora-local">Cargando hora...</span>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">🌙 Modo oscuro</button>
+</div>
+
+<main class="page">
+    <section class="home-services news-section" aria-labelledby="cotizacion-titulo">
+        <div class="home-section-heading">
+            <div>
+                <span class="home-eyebrow">INFORMACIÓN PARA TU PEDIDO</span>
+                <h1 id="cotizacion-titulo">Cotización</h1>
+                <p class="news-intro">Aquí encuentras el proceso, los plazos y las condiciones de tu pedido.</p>
+            </div>
+        </div>
+
+        <div class="news-grid">
+            <article class="card news-card">
+                <div class="news-card-meta"><span class="news-label">01 · Solicitud</span></div>
+                <h2>¿Qué necesitamos para cotizar?</h2>
+                <p>Escríbenos por WhatsApp con la línea que te interesa, la cantidad y la ciudad de destino. El pedido mínimo es de 6 uniformes.</p>
+                <p>Consulta características y precios en las páginas de <a href="basicos.html">Básicos</a>, <a href="pro.html">Pro</a> y <a href="doble-faz.html">Doble-faz</a>. El estilo <a href="neon.html">Neón</a> se cotiza según la línea.</p>
+            </article>
+
+            <article class="card news-card">
+                <div class="news-card-meta"><span class="news-label">02 · Diseño</span></div>
+                <h2>Personalización del equipo</h2>
+                <p>El diseño no tiene costo adicional. Antes de producir, se debe aprobar el diseño y entregar los nombres, tallas y demás especificaciones del pedido.</p>
+            </article>
+
+            <article class="card news-card">
+                <div class="news-card-meta"><span class="news-label">03 · Producción y pago</span></div>
+                <h2>Plazo y pagos</h2>
+                <p>El plazo aproximado de producción es de 15 días y comienza después de aprobar el diseño y recibir toda la información necesaria del pedido.</p>
+                <p>Para iniciar la producción, se requiere un anticipo mínimo del 50% del valor total del pedido. Si lo prefieres, puedes pagar el 100% de una vez.</p>
+                <p>Cuando los uniformes estén listos para despacho, te confirmaremos el saldo pendiente para completar el valor total del pedido.</p>
+            </article>
+
+            <article class="card news-card">
+                <div class="news-card-meta"><span class="news-label">04 · Envío y garantía</span></div>
+                <h2>Entrega de tu pedido</h2>
+                <p>El envío no está incluido en el precio de los uniformes y estará a cargo del comprador. Su costo y tiempo estimado se cotizan por WhatsApp, según el destino y la empresa transportadora.</p>
+                <p>Si algún uniforme presenta daños, nos encargamos de su reparación. <a href="pruebas.html">Conoce nuestras pruebas de calidad.</a></p>
+            </article>
+        </div>
+    </section>
+
+    <section class="home-contact">
+        <div>
+            <span class="home-eyebrow">HABLEMOS DE TU EQUIPO</span>
+            <h2>¿Listo para cotizar?</h2>
+        </div>
+        <a class="btn-whatsapp" href="https://wa.me/573238382435/?text=Hola%20YASA%20Sports%2C%20quiero%20cotizar%20un%20pedido%20personalizado." target="_blank" rel="noopener noreferrer">
+            COTIZAR POR WHATSAPP
+        </a>
+    </section>
+
+    <footer class="site-footer">YASA SPORTS</footer>
+</main>
+
+<script>
+function actualizarHoraLocal() {
+    const reloj = document.getElementById("hora-local");
+    if (!reloj) return;
+
+    const ahora = new Date();
+    const hora = ahora.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+    const fecha = ahora.toLocaleDateString([], {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+
+    reloj.textContent = `${fecha} · ${hora}`;
+}
+
+actualizarHoraLocal();
+setInterval(actualizarHoraLocal, 1000);
+</script>
+</div>
+</body>
+</html>

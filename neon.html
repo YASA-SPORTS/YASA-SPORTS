@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agrega el estilo neón real a uniformes Básicos, Pro o Doble-faz de YASA SPORTS.">
+    <title>YASA SPORTS - ESTILO NEÓN</title>
+    <script src="tema.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<aside class="sidebar">
+    <a class="sidebar-brand" href="index.html" aria-label="Ir al inicio de YASA SPORTS">
+        <img src="logo-yasa.jpeg" alt="YASA SPORTS">
+    </a>
+    <nav class="sidebar-nav" aria-label="Menú principal">
+        <a href="index.html">Inicio</a>
+        <a href="basicos.html">Básicos</a>
+        <a href="pro.html">Pro</a>
+        <a href="doble-faz.html">Doble-faz</a>
+        <a class="active" href="neon.html" aria-current="page">Neón</a>
+        <a href="cotizacion.html">Cotización</a>
+        <a href="novedades.html">Novedades</a>
+        <a href="pruebas.html">Pruebas</a>
+        <a href="sublimacion.html">Sublimación</a>
+        <a href="catalogo.html">Catálogo</a>
+    </nav>
+    <div class="sidebar-social" aria-label="Redes sociales">
+        <a href="https://www.tiktok.com/@yasa.sports" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="tiktok.jpeg" alt="TikTok"></a>
+        <a href="https://web.facebook.com/amfuniformes?locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="facebook.jpeg" alt="Facebook"></a>
+        <a href="https://www.instagram.com/sportsyasa/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="instagram.jpeg" alt="Instagram"></a>
+        <a class="sidebar-whatsapp" href="https://wa.me/573238382435" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+    </div>
+</aside>
+
+<div class="site-content">
+<div class="page-tools">
+    <div class="local-clock" aria-live="polite">
+        <span id="hora-local">Cargando hora...</span>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">🌙 Modo oscuro</button>
+</div>
+
+<main class="page">
+
+    <section class="card product-layout">
+        <div class="media-panel">
+            <figure>
+                <video class="product-video"
+                       src="neon.mp4"
+                       controls
+                       playsinline
+                       preload="metadata"
+                       aria-label="Video de un uniforme YASA SPORTS con impresión neón real">
+                    Tu navegador no soporta la reproducción de video.
+                </video>
+               
+            </figure>
+
+           
+        </div>
+
+        <div class="product-info">
+            <h1>ESTILO NEÓN</h1>
+            <div class="price">Cotización <small>/ según  tipo de uniforme.</small></div>
+            <p class="description">
+                El estilo neón puede aplicarse a todos los uniformes.
+                Nuestra impresora utiliza tinta neón real, sin simular el efecto con colores convencionales.
+            </p>
+
+            <ul class="feature-list">
+                <li>✔️ <strong>Disponible en todos los uniformes:</strong> Básicos, Pro, Doble-faz y cualquier línea personalizada.</li>
+                <li>✔️ <strong>Amarillo neón:</strong> disponible para personalizar tu uniforme.</li>
+                <li>✔️ <strong>Verde neón:</strong> disponible para personalizar tu uniforme.</li>
+                <li>ℹ️ <strong>Disponibilidad:</strong> por la configuración actual de la impresora, el efecto neón solo está disponible en estos tonos cercanos al amarillo.</li>
+                <li>✔️ <strong>Cotización:</strong> consúltanos el precio según  el tipo de uniforme.</li>
+            </ul>
+
+            <a href="https://wa.me/573238382435/?text=Hola%20YASA%20Sports%2C%20quiero%20cotizar%20uniformes%20deportivos%20con%20impresión%20neón%20real.%20Me%20interesa%20amarillo%20neón%20o%20verde%20neón%3B%20por%20favor%20indíquenme%20precio%20y%20disponibilidad."
+               target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                COTIZAR UNIFORME NEÓN POR WHATSAPP
+            </a>
+        </div>
+    </section>
+
+</main>
+
+<script>
+function actualizarHoraLocal() {
+    const reloj = document.getElementById("hora-local");
+    if (!reloj) return;
+
+    const ahora = new Date();
+    const hora = ahora.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+    const fecha = ahora.toLocaleDateString([], {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+
+    reloj.textContent = `${fecha} · ${hora}`;
+}
+
+actualizarHoraLocal();
+setInterval(actualizarHoraLocal, 1000);
+</script>
+ </div>
+</body>
+</html>

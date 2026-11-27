@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Uniformes deportivos BÁSICOS de YASA SPORTS desde $55.000 por unidad, al por mayor a partir de 6 unidades.">
+    <title>YASA SPORTS - BÁSICOS</title>
+    <script src="tema.js"></script>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<aside class="sidebar">
+    <a class="sidebar-brand" href="index.html" aria-label="Ir al inicio de YASA SPORTS">
+        <img src="logo-yasa.jpeg" alt="YASA SPORTS">
+    </a>
+    <nav class="sidebar-nav" aria-label="Menú principal">
+        <a href="index.html">Inicio</a>
+        <a class="active" href="basicos.html" aria-current="page">Básicos</a>
+        <a href="pro.html">Pro</a>
+        <a href="doble-faz.html">Doble-faz</a>
+        <a href="neon.html">Neón</a>
+        <a href="cotizacion.html">Cotización</a>
+        <a href="novedades.html">Novedades</a>
+        <a href="pruebas.html">Pruebas</a>
+        <a href="sublimacion.html">Sublimación</a>
+        <a href="catalogo.html">Catálogo</a>
+    </nav>
+    <div class="sidebar-social" aria-label="Redes sociales">
+        <a href="https://www.tiktok.com/@yasa.sports" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="tiktok.jpeg" alt="TikTok"></a>
+        <a href="https://web.facebook.com/amfuniformes?locale=es_LA" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="facebook.jpeg" alt="Facebook"></a>
+        <a href="https://www.instagram.com/sportsyasa/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="instagram.jpeg" alt="Instagram"></a>
+        <a class="sidebar-whatsapp" href="https://wa.me/573238382435" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">WA</a>
+    </div>
+</aside>
+
+<div class="site-content">
+<div class="page-tools">
+    <div class="local-clock" aria-live="polite">
+        <span id="hora-local">Cargando hora...</span>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">🌙 Modo oscuro</button>
+</div>
+
+
+<main class="page">
+
+    <section class="card product-layout">
+
+        <div class="media-panel">
+            <img src="basicos.jpeg"
+                 alt="Uniforme deportivo BÁSICOS personalizado de YASA SPORTS"
+                 class="product-photo"
+                 width="560"
+                 height="620"
+                 decoding="async"
+                 fetchpriority="high">
+        </div>
+
+        <div class="product-info">
+            <h1>UNIFORME BÁSICOS</h1>
+
+            <div class="price">$55.000 <small>/ por uniforme</small></div>
+
+            <div class="note">
+                * Este precio aplica al por mayor a partir de 6 unidades.
+                <br>Consulta las condiciones de cotización, producción y envío en <a href="cotizacion.html">Cotización</a>.
+            </div>
+
+            <ul class="feature-list">
+                <li>✔️ <strong>Camiseta:</strong> Personalizada en tela microfibra deportiva o sudáfrica (microperforada). Cuello V o cuello redondo.</li>
+                <li>✔️ <strong>Pantaloneta:</strong> Licrada o impermeable.</li>
+                <li>✔️ <strong>Medias:</strong> Semi-profesionales.</li>
+                <li>✔️ <strong>Diseño:</strong> Sin costo adicional.</li>
+                <li>✔️ <strong>Estilo neón:</strong> disponible como opción adicional con precio adicional de 5.000. <a href="neon.html">Conocer el estilo neón</a>.</li>
+                <li>✔️ <strong>Método:</strong> <a href="sublimacion.html">Sublimación</a></li>
+            </ul>
+
+            <a href="https://wa.me/573238382435/?text=Hola%20YASA%20Sports%2C%20quiero%20solicitar%20información%20sobre%20el%20Uniforme%20BÁSICOS"
+               target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                PEDIR POR WHATSAPP
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+function actualizarHoraLocal() {
+    const reloj = document.getElementById("hora-local");
+    if (!reloj) return;
+
+    const ahora = new Date();
+
+    const hora = ahora.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+    });
+
+    const fecha = ahora.toLocaleDateString([], {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+
+    reloj.textContent = `${fecha} · ${hora}`;
+}
+
+actualizarHoraLocal();
+setInterval(actualizarHoraLocal, 1000);
+</script>
+ </div>
+</body>
+</html>
