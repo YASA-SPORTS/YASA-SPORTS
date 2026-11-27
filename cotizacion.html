@@ -61,10 +61,14 @@
                     </select>
                 </label>
 
-                <label for="quote-quantity">
-                    Cantidad de uniformes
-                    <input id="quote-quantity" type="number" min="6" max="500" step="1" value="6" inputmode="numeric">
-                </label>
+                <div class="quote-quantity-field">
+                    <label for="quote-quantity">Cantidad de uniformes</label>
+                    <div class="quote-quantity-stepper">
+                        <button class="quote-quantity-button" id="quote-quantity-decrease" type="button" aria-label="Restar un uniforme">−</button>
+                        <input id="quote-quantity" type="number" min="6" max="500" step="1" value="6" inputmode="numeric">
+                        <button class="quote-quantity-button" id="quote-quantity-increase" type="button" aria-label="Agregar un uniforme">+</button>
+                    </div>
+                </div>
 
                 <label class="quick-quote-neon" for="quote-neon">
                     <input id="quote-neon" type="checkbox">
@@ -163,6 +167,8 @@ const quoteLines = {
 const quoteLine = document.getElementById("quote-line");
 const quoteQuantity = document.getElementById("quote-quantity");
 const quoteNeon = document.getElementById("quote-neon");
+const decreaseQuantity = document.getElementById("quote-quantity-decrease");
+const increaseQuantity = document.getElementById("quote-quantity-increase");
 
 function formatCop(value) {
     return new Intl.NumberFormat("es-CO", {
@@ -184,6 +190,9 @@ function actualizarCotizacionRapida() {
         quoteQuantity.value = "500";
     }
 
+    decreaseQuantity.disabled = quantity <= 6;
+    increaseQuantity.disabled = quantity >= 500;
+
     const neonCost = quoteNeon.checked ? line.neon : 0;
     const unitPrice = line.price + neonCost;
     const total = unitPrice * quantity;
@@ -204,6 +213,14 @@ function actualizarCotizacionRapida() {
 quoteLine.addEventListener("change", actualizarCotizacionRapida);
 quoteQuantity.addEventListener("input", actualizarCotizacionRapida);
 quoteNeon.addEventListener("change", actualizarCotizacionRapida);
+decreaseQuantity.addEventListener("click", function () {
+    quoteQuantity.value = String(Number(quoteQuantity.value) - 1);
+    actualizarCotizacionRapida();
+});
+increaseQuantity.addEventListener("click", function () {
+    quoteQuantity.value = String(Number(quoteQuantity.value) + 1);
+    actualizarCotizacionRapida();
+});
 actualizarCotizacionRapida();
 
 function actualizarHoraLocal() {
