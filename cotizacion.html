@@ -350,8 +350,9 @@ function actualizarCotizacionRapida(save = true) {
     const destination = city || "Por indicar";
     const team = quoteTeam.value.trim();
     const teamName = team || "Por indicar";
-    const sportDescription = quoteSport ? ` para ${quoteSport}` : "";
-    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name}${sportDescription} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Equipo o club: ${teamName}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
+    const sportName = quoteSport || "Por indicar";
+    const styleName = quoteNeon.checked ? "Neón" : "Sin neón";
+    const message = `*COTIZACIÓN DE UNIFORMES*\n\nHola YASA Sports, quisiera cotizar un pedido:\n\n*Equipo o club:* ${teamName}\n*Deporte:* ${sportName}\n*Línea:* ${line.name}\n*Cantidad:* ${quantity} uniformes\n*Estilo:* ${styleName}\n\n*Valor estimado:* ${formatCop(total)}\n*Anticipo (50%):* ${formatCop(deposit)}\n*Saldo pendiente:* ${formatCop(balance)}\n*Ciudad o municipio:* ${destination}\n\nEl envío se cotiza aparte.`;
     document.getElementById("quote-whatsapp").href =
         `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
 
