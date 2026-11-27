@@ -47,7 +47,7 @@
             <div>
                 <span class="home-eyebrow">TE AYUDAMOS A ELEGIR</span>
                 <h2 id="line-finder-title">Encuentra la línea ideal para tu equipo</h2>
-                <p class="line-finder-intro">Cuéntanos qué deporte practican y qué buscan en su uniforme.</p>
+                <p class="line-finder-intro">La sugerencia considera lo que priorizan y su presupuesto. El deporte se agrega al mensaje para cotizar.</p>
             </div>
         </div>
 
@@ -64,11 +64,11 @@
             </label>
 
             <label for="finder-priority">
-                ¿Qué es más importante para ustedes?
+                ¿Qué quieren priorizar?
                 <select id="finder-priority" required>
-                    <option value="basicos">Una opción esencial y funcional</option>
-                    <option value="pro">Un acabado premium</option>
-                    <option value="doble-faz">Tener dos estilos en una prenda</option>
+                    <option value="basicos">La menor inversión</option>
+                    <option value="pro">Acabado premium y tela texturizada</option>
+                    <option value="doble-faz">Dos estilos en una prenda</option>
                 </select>
             </label>
 
@@ -81,6 +81,22 @@
                 </div>
             </div>
 
+            <label for="finder-budget">
+                Presupuesto máximo del pedido en pesos (opcional)
+                <input id="finder-budget" type="number" min="0" step="any" placeholder="Ej. 450000" inputmode="decimal" aria-describedby="finder-budget-help">
+                <small class="finder-budget-help" id="finder-budget-help">Incluye neón si lo marcas; el envío se cotiza aparte.</small>
+            </label>
+
+            <div class="finder-neon-field">
+                <label class="quick-quote-neon" for="finder-neon">
+                    <input id="finder-neon" type="checkbox">
+                    <span>
+                        <strong>Incluir estilo neón</strong>
+                        <small>El recargo depende de la línea.</small>
+                    </span>
+                </label>
+            </div>
+
             <button class="line-finder-submit" type="submit">ENCONTRAR MI LÍNEA</button>
         </form>
 
@@ -90,7 +106,7 @@
                 <h3 id="line-finder-result-title"></h3>
                 <p id="line-finder-result-description"></p>
             </div>
-            <button class="line-finder-apply" id="line-finder-apply" type="button">USAR ESTA OPCIÓN EN LA CALCULADORA</button>
+            <button class="line-finder-apply" id="line-finder-apply" type="button" hidden>USAR ESTA OPCIÓN EN LA CALCULADORA</button>
         </div>
     </section>
 
@@ -303,10 +319,14 @@ const quoteClearButton = document.getElementById("quote-clear");
 const finderForm = document.getElementById("line-finder-form");
 const finderSport = document.getElementById("finder-sport");
 const finderPriority = document.getElementById("finder-priority");
+const finderBudget = document.getElementById("finder-budget");
+const finderNeon = document.getElementById("finder-neon");
 const finderQuantity = document.getElementById("finder-quantity");
 const finderDecrease = document.getElementById("finder-quantity-decrease");
 const finderIncrease = document.getElementById("finder-quantity-increase");
 const finderResult = document.getElementById("line-finder-result");
+const finderResultLabel = finderResult.querySelector(".line-finder-result-label");
+const finderApply = document.getElementById("line-finder-apply");
 let quoteSport = "";
 let pendingRecommendation = null;
 
@@ -448,6 +468,7 @@ function restaurarCotizacionRapida() {
     quoteSport = savedQuote.sport;
     if (savedQuote.sport) finderSport.value = savedQuote.sport;
     finderPriority.value = savedQuote.line;
+    finderNeon.checked = savedQuote.neon;
     finderQuantity.value = String(savedQuote.quantity);
     quoteSaveStatus.textContent = "Recuperamos tu cotización guardada en este dispositivo.";
 }
@@ -460,6 +481,7 @@ function actualizarControlesRecomendador() {
 
 function invalidarRecomendacion() {
     pendingRecommendation = null;
+    finderApply.hidden = true;
     finderResult.hidden = true;
 }
 
@@ -470,33 +492,69 @@ finderForm.addEventListener("input", function () {
 finderForm.addEventListener("change", invalidarRecomendacion);
 finderForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!finderQuantity.reportValidity()) return;
+    if (!finderQuantity.reportValidity() || !finderBudget.reportValidity()) return;
 
-    const lineKey = finderPriority.value;
-    const line = quoteLines[lineKey];
+    const preferredLine = finderPriority.value;
+    const quantity = Number.parseInt(finderQuantity.value, 10);
+    const neon = finderNeon.checked;
+    const budget = finderBudget.value.trim() ? Number(finderBudget.value) : null;
+    const recommendationOrder = {
+        basicos: ["basicos", "pro", "doble-faz"],
+        pro: ["pro", "basicos"],
+        "doble-faz": ["doble-faz", "pro", "basicos"]
+    };
     const descriptions = {
         basicos: "Básicos ofrece una opción esencial y funcional para vestir a tu equipo.",
         pro: "Pro destaca por su tela texturizada y un acabado de presencia premium.",
         "doble-faz": "Doble-faz ofrece dos estilos en una misma prenda para mayor versatilidad."
     };
+    const estimateForLine = function (lineKey) {
+        const line = quoteLines[lineKey];
+        return (line.price + (neon ? line.neon : 0)) * quantity;
+    };
+    const lineKey = recommendationOrder[preferredLine].find(function (candidate) {
+        return budget === null || estimateForLine(candidate) <= budget;
+    });
 
+    finderResult.hidden = false;
+    finderApply.hidden = true;
+
+    if (!lineKey) {
+        pendingRecommendation = null;
+        const minimumTotal = Math.min(...Object.keys(quoteLines).map(estimateForLine));
+        finderResultLabel.textContent = "PRESUPUESTO POR AJUSTAR";
+        document.getElementById("line-finder-result-title").textContent =
+            "No encontramos una línea dentro de ese tope";
+        document.getElementById("line-finder-result-description").textContent =
+            `El estimado más bajo para ${quantity} uniformes${neon ? " con neón" : ""} es ${formatCop(minimumTotal)}, sin envío. Aumenta el presupuesto o desmarca el estilo neón.`;
+        return;
+    }
+
+    const line = quoteLines[lineKey];
+    const preferredName = quoteLines[preferredLine].name;
+    const fallbackText = lineKey === preferredLine
+        ? descriptions[lineKey]
+        : `${preferredName} supera tu tope; ${line.name} es la alternativa estimada dentro del presupuesto. Sus características son distintas.`;
     pendingRecommendation = {
         lineKey: lineKey,
-        quantity: Number.parseInt(finderQuantity.value, 10),
-        sport: finderSport.value
+        quantity: quantity,
+        sport: finderSport.value,
+        neon: neon
     };
+    finderResultLabel.textContent = budget === null ? "SUGERENCIA POR TU PRIORIDAD" : "SUGERENCIA SEGÚN TU PRESUPUESTO";
     document.getElementById("line-finder-result-title").textContent =
-        `${line.name} puede ser una buena opción para ${pendingRecommendation.sport}`;
+        `${line.name} puede encajar con tu equipo`;
     document.getElementById("line-finder-result-description").textContent =
-        `${descriptions[lineKey]} Recomendado para un pedido de ${pendingRecommendation.quantity} uniformes.`;
-    finderResult.hidden = false;
+        `${fallbackText} Estimado para ${quantity} uniformes${neon ? " con neón" : ""}: ${formatCop(estimateForLine(lineKey))}, sin envío. El deporte se agrega al mensaje, pero no cambia el precio.`;
+    finderApply.hidden = false;
 });
 
-document.getElementById("line-finder-apply").addEventListener("click", function () {
+finderApply.addEventListener("click", function () {
     if (!pendingRecommendation) return;
 
     quoteLine.value = pendingRecommendation.lineKey;
     quoteQuantity.value = String(pendingRecommendation.quantity);
+    quoteNeon.checked = pendingRecommendation.neon;
     quoteSport = pendingRecommendation.sport;
     actualizarCotizacionRapida();
     document.querySelector(".quick-quote").scrollIntoView({ behavior: "smooth", block: "start" });
