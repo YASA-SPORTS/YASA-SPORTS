@@ -1166,6 +1166,7 @@ img,video{display:block;max-width:100%}
 
     .site-content{
         min-height:100vh;
+        margin-left:0;
         padding-bottom:174px;
     }
 
@@ -1404,7 +1405,8 @@ img,video{display:block;max-width:100%}
 }
 
 .quick-quote-controls select,
-.quick-quote-controls input[type="number"]{
+.quick-quote-controls input[type="number"],
+.quick-quote-controls input[type="text"]{
     width:100%;
     min-height:48px;
     padding:10px 12px;
@@ -1565,6 +1567,171 @@ img,video{display:block;max-width:100%}
     margin:14px 0 0;
     color:var(--suave);
     font-size:.82rem;
+}
+
+.quote-summary,
+.quote-comparison{
+    margin-top:22px;
+    padding:24px;
+    border:1px solid var(--borde);
+    border-radius:18px;
+    background:var(--blanco);
+}
+
+.quote-summary h2,
+.quote-comparison h2{
+    margin:3px 0 0;
+    color:var(--negro);
+    font-size:clamp(1.25rem,2.5vw,1.8rem);
+}
+
+.quote-summary-details{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+    margin:18px 0 12px;
+}
+
+.quote-summary-details div{
+    min-width:0;
+    padding:12px;
+    border-radius:11px;
+    background:var(--fondo);
+}
+
+.quote-summary-details dt{
+    color:var(--suave);
+    font-size:.72rem;
+}
+
+.quote-summary-details dd{
+    margin:4px 0 0;
+    color:var(--negro);
+    font-size:.9rem;
+    font-weight:900;
+    overflow-wrap:anywhere;
+}
+
+.quote-summary-shipping,
+.quote-comparison-note{
+    margin:12px 0;
+    color:var(--suave);
+    font-size:.8rem;
+}
+
+.quote-share-button{
+    min-height:46px;
+    padding:10px 18px;
+    border:1px solid #111;
+    border-radius:999px;
+    background:var(--amarillo);
+    color:#111;
+    font:inherit;
+    font-size:.82rem;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.quote-share-button:hover{
+    background:#f2d200;
+}
+
+.quote-share-button:focus-visible{
+    outline:3px solid var(--negro);
+    outline-offset:3px;
+}
+
+.quote-share-status{
+    min-height:1.3em;
+    margin:8px 0 0;
+    color:var(--suave);
+    font-size:.8rem;
+}
+
+.quote-comparison-heading{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:16px;
+}
+
+.quote-comparison-heading>p{
+    margin:0;
+    color:var(--suave);
+    font-size:.82rem;
+}
+
+.quote-comparison-heading>p strong{
+    color:var(--negro);
+}
+
+.quote-comparison-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+}
+
+.quote-comparison-card{
+    display:flex;
+    min-width:0;
+    flex-direction:column;
+    align-items:flex-start;
+    padding:18px;
+    border:1px solid var(--borde);
+    border-radius:14px;
+    background:var(--fondo);
+}
+
+.quote-comparison-card:first-child{
+    border-top:3px solid var(--amarillo);
+}
+
+.quote-comparison-card:nth-child(2){
+    border-top:3px solid #c8a951;
+}
+
+.quote-comparison-card:nth-child(3){
+    border-top:3px solid #8e9bb8;
+}
+
+.quote-comparison-tag{
+    color:var(--suave);
+    font-size:.68rem;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.quote-comparison-card h3{
+    margin:8px 0 4px;
+    color:var(--negro);
+    font-size:1.2rem;
+}
+
+.quote-comparison-card p{
+    min-height:42px;
+    margin:0 0 14px;
+    color:var(--suave);
+    font-size:.8rem;
+}
+
+.quote-comparison-price{
+    color:var(--negro);
+    font-size:1.5rem;
+}
+
+.quote-comparison-card>small{
+    color:var(--suave);
+    font-size:.72rem;
+}
+
+.quote-comparison-card>a{
+    margin-top:14px;
+    color:var(--negro);
+    font-size:.82rem;
+    font-weight:900;
+    text-underline-offset:3px;
 }
 
 .home-comparator-options{
@@ -2054,6 +2221,10 @@ img,video{display:block;max-width:100%}
     .quick-quote-grid{
         grid-template-columns:1fr;
     }
+
+    .quote-comparison-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
 }
 
 @media (max-width:700px){
@@ -2112,6 +2283,20 @@ img,video{display:block;max-width:100%}
 
     .quick-quote-payment{
         grid-template-columns:1fr;
+    }
+
+    .quote-summary-details,
+    .quote-comparison-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quote-comparison-heading{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .quote-comparison-card p{
+        min-height:0;
     }
 
     .comparator-option{

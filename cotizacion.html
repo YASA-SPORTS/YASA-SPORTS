@@ -46,7 +46,7 @@
         <div class="home-section-heading">
             <div>
                 <span class="home-eyebrow">CALCULADORA RÁPIDA</span>
-                <h1 id="calculadora-titulo">Estima el valor de tu pedido</h1>
+                <h2 id="calculadora-titulo">Estima el valor de tu pedido</h2>
             </div>
         </div>
 
@@ -77,6 +77,11 @@
                         <small>Disponible en amarillo o verde neón</small>
                     </span>
                 </label>
+
+                <label for="quote-city">
+                    Ciudad o municipio
+                    <input id="quote-city" type="text" maxlength="80" placeholder="Ej. Florencia, Caquetá" autocomplete="address-level2">
+                </label>
             </div>
 
             <div class="quick-quote-result" aria-live="polite">
@@ -100,6 +105,62 @@
                 </a>
             </div>
         </div>
+
+        <section class="quote-summary" aria-labelledby="quote-summary-title">
+            <div>
+                <span class="home-eyebrow">LISTO PARA ENVIAR</span>
+                <h2 id="quote-summary-title">Resumen de tu pedido</h2>
+            </div>
+            <dl class="quote-summary-details">
+                <div><dt>Línea y cantidad</dt><dd id="summary-line">6 uniformes Básicos</dd></div>
+                <div><dt>Valor por uniforme</dt><dd id="summary-unit-price">$55.000</dd></div>
+                <div><dt>Estilo neón</dt><dd id="summary-neon">No</dd></div>
+                <div><dt>Estimado de uniformes</dt><dd id="summary-total">$330.000</dd></div>
+                <div><dt>Anticipo estimado (50%)</dt><dd id="summary-deposit">$165.000</dd></div>
+                <div><dt>Saldo estimado</dt><dd id="summary-balance">$165.000</dd></div>
+                <div><dt>Ciudad o municipio</dt><dd id="summary-city">Por indicar</dd></div>
+            </dl>
+            <p class="quote-summary-shipping">El envío no está incluido; YASA lo cotizará según el destino.</p>
+            <button class="quote-share-button" id="quote-share" type="button">COMPARTIR RESUMEN</button>
+            <p class="quote-share-status" id="quote-share-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="quote-comparison" aria-labelledby="quote-comparison-title">
+            <div class="quote-comparison-heading">
+                <div>
+                    <span class="home-eyebrow">COMPARA TUS OPCIONES</span>
+                    <h2 id="quote-comparison-title">¿Qué línea va mejor con tu equipo?</h2>
+                </div>
+                <p>Estimados para <strong id="comparison-quantity">6</strong> uniformes, <span id="comparison-neon">sin estilo neón</span>.</p>
+            </div>
+            <div class="quote-comparison-grid">
+                <article class="quote-comparison-card">
+                    <span class="quote-comparison-tag">Esencial y funcional</span>
+                    <h3>Básicos</h3>
+                    <p>Microfibra deportiva o tela sudáfrica; cuello V o redondo.</p>
+                    <strong class="quote-comparison-price" id="comparison-basicos">$330.000</strong>
+                    <small id="comparison-basicos-unit">$55.000 por uniforme</small>
+                    <a href="basicos.html">Ver Básicos →</a>
+                </article>
+                <article class="quote-comparison-card">
+                    <span class="quote-comparison-tag">Acabado premium</span>
+                    <h3>Pro</h3>
+                    <p>Tela texturizada y diseño pensado para destacar.</p>
+                    <strong class="quote-comparison-price" id="comparison-pro">$390.000</strong>
+                    <small id="comparison-pro-unit">$65.000 por uniforme</small>
+                    <a href="pro.html">Ver Pro →</a>
+                </article>
+                <article class="quote-comparison-card">
+                    <span class="quote-comparison-tag">Dos estilos en uno</span>
+                    <h3>Doble-faz</h3>
+                    <p>Dos presentaciones en una misma prenda para mayor versatilidad.</p>
+                    <strong class="quote-comparison-price" id="comparison-doble-faz">$468.000</strong>
+                    <small id="comparison-doble-faz-unit">$78.000 por uniforme</small>
+                    <a href="doble-faz.html">Ver Doble-faz →</a>
+                </article>
+            </div>
+            <p class="quote-comparison-note">Los valores son aproximados, no incluyen envío y aplican al pedido mínimo de 6 uniformes. El precio final se confirma por WhatsApp.</p>
+        </section>
 
         <p class="quick-quote-disclaimer">Estimación informativa. No incluye envío, el cual se cotiza según el destino. El pedido mínimo es de 6 uniformes.</p>
     </section>
@@ -167,8 +228,11 @@ const quoteLines = {
 const quoteLine = document.getElementById("quote-line");
 const quoteQuantity = document.getElementById("quote-quantity");
 const quoteNeon = document.getElementById("quote-neon");
+const quoteCity = document.getElementById("quote-city");
 const decreaseQuantity = document.getElementById("quote-quantity-decrease");
 const increaseQuantity = document.getElementById("quote-quantity-increase");
+const quoteShare = document.getElementById("quote-share");
+const quoteShareStatus = document.getElementById("quote-share-status");
 
 function formatCop(value) {
     return new Intl.NumberFormat("es-CO", {
@@ -205,14 +269,37 @@ function actualizarCotizacionRapida() {
     document.getElementById("quote-deposit").textContent = formatCop(deposit);
     document.getElementById("quote-balance").textContent = formatCop(balance);
 
-    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. La estimación aproximada es de ${formatCop(total)}.`;
+    const city = quoteCity.value.trim();
+    const destination = city || "Por indicar";
+    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
     document.getElementById("quote-whatsapp").href =
         `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
+
+    document.getElementById("summary-line").textContent = `${quantity} uniformes ${line.name}`;
+    document.getElementById("summary-unit-price").textContent = formatCop(unitPrice);
+    document.getElementById("summary-neon").textContent = quoteNeon.checked ? "Sí" : "No";
+    document.getElementById("summary-total").textContent = formatCop(total);
+    document.getElementById("summary-deposit").textContent = formatCop(deposit);
+    document.getElementById("summary-balance").textContent = formatCop(balance);
+    document.getElementById("summary-city").textContent = destination;
+
+    document.getElementById("comparison-quantity").textContent = String(quantity);
+    document.getElementById("comparison-neon").textContent = quoteNeon.checked ? "con estilo neón" : "sin estilo neón";
+    Object.keys(quoteLines).forEach(function (key) {
+        const comparisonLine = quoteLines[key];
+        const comparisonUnitPrice = comparisonLine.price + (quoteNeon.checked ? comparisonLine.neon : 0);
+        document.getElementById(`comparison-${key}`).textContent = formatCop(comparisonUnitPrice * quantity);
+        document.getElementById(`comparison-${key}-unit`).textContent =
+            `${formatCop(comparisonUnitPrice)} por uniforme`;
+    });
+
+    quoteShare.dataset.message = message;
 }
 
 quoteLine.addEventListener("change", actualizarCotizacionRapida);
 quoteQuantity.addEventListener("input", actualizarCotizacionRapida);
 quoteNeon.addEventListener("change", actualizarCotizacionRapida);
+quoteCity.addEventListener("input", actualizarCotizacionRapida);
 decreaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) - 1);
     actualizarCotizacionRapida();
@@ -220,6 +307,25 @@ decreaseQuantity.addEventListener("click", function () {
 increaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) + 1);
     actualizarCotizacionRapida();
+});
+quoteShare.addEventListener("click", async function () {
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: "Resumen de cotización YASA SPORTS",
+                text: quoteShare.dataset.message
+            });
+        } else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(quoteShare.dataset.message);
+            quoteShareStatus.textContent = "Resumen copiado. Ya puedes pegarlo para compartirlo.";
+        } else {
+            quoteShareStatus.textContent = "Este navegador no permite compartir ni copiar automáticamente. Usa el botón de WhatsApp para enviar tu cotización.";
+        }
+    } catch (error) {
+        if (error.name !== "AbortError") {
+            quoteShareStatus.textContent = "No se pudo compartir automáticamente. Usa el botón de WhatsApp para enviar tu cotización.";
+        }
+    }
 });
 actualizarCotizacionRapida();
 
