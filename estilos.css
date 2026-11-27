@@ -1758,29 +1758,42 @@ img,video{display:block;max-width:100%}
     gap:10px;
 }
 
-.quote-download-button{
+.quote-download-button,
+.quote-clear-button{
     min-height:46px;
     padding:10px 18px;
-    border:1px solid var(--negro);
     border-radius:999px;
-    background:var(--negro);
-    color:var(--blanco);
     font:inherit;
     font-size:.82rem;
     font-weight:900;
     cursor:pointer;
 }
 
-.quote-download-button:hover{
+.quote-download-button{
+    border:1px solid var(--negro);
+    background:var(--negro);
+    color:var(--blanco);
+}
+
+.quote-clear-button{
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    color:var(--negro);
+}
+
+.quote-download-button:hover,
+.quote-clear-button:hover{
     opacity:.86;
 }
 
-.quote-download-button:focus-visible{
+.quote-download-button:focus-visible,
+.quote-clear-button:focus-visible{
     outline:3px solid var(--amarillo);
     outline-offset:3px;
 }
 
-.quote-share-status{
+.quote-share-status,
+.quote-save-status{
     min-height:1.3em;
     margin:8px 0 0;
     color:var(--suave);

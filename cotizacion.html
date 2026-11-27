@@ -134,6 +134,11 @@
                     Ciudad o municipio
                     <input id="quote-city" type="text" maxlength="80" placeholder="Ej. Florencia, Caquetá" autocomplete="address-level2">
                 </label>
+
+                <label for="quote-team">
+                    Nombre del equipo o club
+                    <input id="quote-team" type="text" maxlength="80" placeholder="Ej. Club Deportivo YASA" autocomplete="organization">
+                </label>
             </div>
 
             <div class="quick-quote-result" aria-live="polite">
@@ -171,11 +176,14 @@
                 <div><dt>Anticipo estimado (50%)</dt><dd id="summary-deposit">$165.000</dd></div>
                 <div><dt>Saldo estimado</dt><dd id="summary-balance">$165.000</dd></div>
                 <div><dt>Ciudad o municipio</dt><dd id="summary-city">Por indicar</dd></div>
+                <div><dt>Equipo o club</dt><dd id="summary-team">Por indicar</dd></div>
             </dl>
             <p class="quote-summary-shipping">El envío no está incluido; YASA lo cotizará según el destino.</p>
             <div class="quote-summary-actions">
                 <button class="quote-download-button" id="quote-download" type="button">DESCARGAR COMO IMAGEN</button>
+                <button class="quote-clear-button" id="quote-clear" type="button">BORRAR COTIZACIÓN GUARDADA</button>
             </div>
+            <p class="quote-save-status" id="quote-save-status" role="status" aria-live="polite">Tus cambios se guardarán automáticamente en este dispositivo.</p>
             <p class="quote-share-status" id="quote-download-status" role="status" aria-live="polite"></p>
         </section>
 
@@ -279,15 +287,19 @@ const quoteLines = {
     "doble-faz": { name: "Doble-faz", price: 78000, neon: 10000 }
 };
 
+const quoteStorageKey = "yasa-sports-quote";
 const quoteLine = document.getElementById("quote-line");
 const quoteQuantity = document.getElementById("quote-quantity");
 const quoteNeon = document.getElementById("quote-neon");
 const quoteCity = document.getElementById("quote-city");
+const quoteTeam = document.getElementById("quote-team");
 const quoteDetail = document.getElementById("quote-detail");
 const decreaseQuantity = document.getElementById("quote-quantity-decrease");
 const increaseQuantity = document.getElementById("quote-quantity-increase");
 const quoteDownload = document.getElementById("quote-download");
 const quoteDownloadStatus = document.getElementById("quote-download-status");
+const quoteSaveStatus = document.getElementById("quote-save-status");
+const quoteClearButton = document.getElementById("quote-clear");
 const finderForm = document.getElementById("line-finder-form");
 const finderSport = document.getElementById("finder-sport");
 const finderPriority = document.getElementById("finder-priority");
@@ -306,7 +318,7 @@ function formatCop(value) {
     }).format(value);
 }
 
-function actualizarCotizacionRapida() {
+function actualizarCotizacionRapida(save = true) {
     const line = quoteLines[quoteLine.value];
     let quantity = Number.parseInt(quoteQuantity.value, 10);
 
@@ -336,8 +348,10 @@ function actualizarCotizacionRapida() {
 
     const city = quoteCity.value.trim();
     const destination = city || "Por indicar";
+    const team = quoteTeam.value.trim();
+    const teamName = team || "Por indicar";
     const sportDescription = quoteSport ? ` para ${quoteSport}` : "";
-    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name}${sportDescription} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
+    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name}${sportDescription} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. Equipo o club: ${teamName}. Valor estimado de los uniformes: ${formatCop(total)}. Anticipo estimado del 50%: ${formatCop(deposit)}. Saldo estimado: ${formatCop(balance)}. Ciudad o municipio: ${destination}. Entiendo que el envío se cotiza aparte.`;
     document.getElementById("quote-whatsapp").href =
         `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
 
@@ -348,6 +362,7 @@ function actualizarCotizacionRapida() {
     document.getElementById("summary-deposit").textContent = formatCop(deposit);
     document.getElementById("summary-balance").textContent = formatCop(balance);
     document.getElementById("summary-city").textContent = destination;
+    document.getElementById("summary-team").textContent = teamName;
 
     document.getElementById("comparison-quantity").textContent = String(quantity);
     document.getElementById("comparison-neon").textContent = quoteNeon.checked ? "con estilo neón" : "sin estilo neón";
@@ -358,6 +373,82 @@ function actualizarCotizacionRapida() {
         document.getElementById(`comparison-${key}-unit`).textContent =
             `${formatCop(comparisonUnitPrice)} por uniforme`;
     });
+
+    if (save) guardarCotizacionRapida();
+}
+
+function guardarCotizacionRapida() {
+    const savedQuote = {
+        line: quoteLine.value,
+        quantity: Number.parseInt(quoteQuantity.value, 10),
+        neon: quoteNeon.checked,
+        city: quoteCity.value,
+        team: quoteTeam.value,
+        sport: quoteSport
+    };
+
+    try {
+        localStorage.setItem(quoteStorageKey, JSON.stringify(savedQuote));
+        quoteSaveStatus.textContent = "Cotización guardada en este dispositivo.";
+    } catch (error) {
+        console.warn("No se pudo guardar la cotización en este dispositivo.", error);
+        quoteSaveStatus.textContent = "No se pudo guardar en este dispositivo. Revisa los permisos del navegador.";
+    }
+}
+
+function restaurarCotizacionRapida() {
+    let storedQuote;
+    try {
+        storedQuote = localStorage.getItem(quoteStorageKey);
+    } catch (error) {
+        console.warn("No se pudo leer la cotización guardada.", error);
+        quoteSaveStatus.textContent = "No se pudo recuperar la cotización guardada en este dispositivo.";
+        return;
+    }
+
+    if (storedQuote === null) return;
+
+    let savedQuote;
+    try {
+        savedQuote = JSON.parse(storedQuote);
+    } catch (error) {
+        console.warn("La cotización guardada no tiene un formato válido.", error);
+        quoteSaveStatus.textContent = "No se pudo recuperar la cotización guardada. Al cambiar un dato se guardará una nueva.";
+        return;
+    }
+
+    const validSport = savedQuote && (savedQuote.sport === "" ||
+        Array.from(finderSport.options).some(function (option) {
+            return option.value === savedQuote.sport;
+        }));
+    const validQuote = savedQuote &&
+        typeof savedQuote === "object" &&
+        Object.prototype.hasOwnProperty.call(quoteLines, savedQuote.line) &&
+        Number.isInteger(savedQuote.quantity) &&
+        savedQuote.quantity >= 6 &&
+        savedQuote.quantity <= 500 &&
+        typeof savedQuote.neon === "boolean" &&
+        typeof savedQuote.city === "string" &&
+        savedQuote.city.length <= 80 &&
+        (typeof savedQuote.team === "undefined" ||
+            (typeof savedQuote.team === "string" && savedQuote.team.length <= 80)) &&
+        validSport;
+
+    if (!validQuote) {
+        quoteSaveStatus.textContent = "No se pudo recuperar la cotización guardada. Al cambiar un dato se guardará una nueva.";
+        return;
+    }
+
+    quoteLine.value = savedQuote.line;
+    quoteQuantity.value = String(savedQuote.quantity);
+    quoteNeon.checked = savedQuote.neon;
+    quoteCity.value = savedQuote.city;
+    quoteTeam.value = savedQuote.team || "";
+    quoteSport = savedQuote.sport;
+    if (savedQuote.sport) finderSport.value = savedQuote.sport;
+    finderPriority.value = savedQuote.line;
+    finderQuantity.value = String(savedQuote.quantity);
+    quoteSaveStatus.textContent = "Recuperamos tu cotización guardada en este dispositivo.";
 }
 
 function actualizarControlesRecomendador() {
@@ -425,10 +516,35 @@ finderIncrease.addEventListener("click", function () {
     actualizarControlesRecomendador();
 });
 
+quoteClearButton.addEventListener("click", function () {
+    try {
+        localStorage.removeItem(quoteStorageKey);
+    } catch (error) {
+        console.warn("No se pudo borrar la cotización guardada.", error);
+        quoteSaveStatus.textContent = "No se pudo borrar la cotización guardada. Revisa los permisos del navegador.";
+        return;
+    }
+
+    quoteLine.value = "basicos";
+    quoteQuantity.value = "6";
+    quoteNeon.checked = false;
+    quoteCity.value = "";
+    quoteTeam.value = "";
+    quoteSport = "";
+    finderSport.selectedIndex = 0;
+    finderPriority.selectedIndex = 0;
+    finderQuantity.value = "6";
+    invalidarRecomendacion();
+    actualizarControlesRecomendador();
+    actualizarCotizacionRapida(false);
+    quoteSaveStatus.textContent = "Cotización borrada. Puedes empezar una nueva.";
+});
+
 quoteLine.addEventListener("change", actualizarCotizacionRapida);
 quoteQuantity.addEventListener("input", actualizarCotizacionRapida);
 quoteNeon.addEventListener("change", actualizarCotizacionRapida);
 quoteCity.addEventListener("input", actualizarCotizacionRapida);
+quoteTeam.addEventListener("input", actualizarCotizacionRapida);
 decreaseQuantity.addEventListener("click", function () {
     quoteQuantity.value = String(Number(quoteQuantity.value) - 1);
     actualizarCotizacionRapida();
@@ -466,6 +582,7 @@ quoteDownload.addEventListener("click", async function () {
 
         const summaryItems = [
             ["LÍNEA Y CANTIDAD", document.getElementById("summary-line").textContent],
+            ["EQUIPO O CLUB", document.getElementById("summary-team").textContent],
             ["VALOR POR UNIFORME", document.getElementById("summary-unit-price").textContent],
             ["ESTILO NEÓN", document.getElementById("summary-neon").textContent],
             ["CIUDAD O MUNICIPIO", document.getElementById("summary-city").textContent]
@@ -495,7 +612,7 @@ quoteDownload.addEventListener("click", async function () {
             context.fillStyle = "#111111";
             context.font = "700 30px Arial";
             context.fillText(item[1], padding + 36, itemY + 42, width - padding * 2 - 72);
-            itemY += 90;
+            itemY += 70;
         });
 
         context.fillStyle = "#111111";
@@ -541,7 +658,8 @@ quoteDownload.addEventListener("click", async function () {
         quoteDownloadStatus.textContent = "No se pudo descargar la imagen del resumen. Revisa los permisos del navegador e inténtalo de nuevo.";
     }
 });
-actualizarCotizacionRapida();
+restaurarCotizacionRapida();
+actualizarCotizacionRapida(false);
 
 function actualizarHoraLocal() {
     const reloj = document.getElementById("hora-local");
