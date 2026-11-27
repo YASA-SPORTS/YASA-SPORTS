@@ -42,6 +42,64 @@
 </div>
 
 <main class="page">
+    <section class="quick-quote" aria-labelledby="calculadora-titulo">
+        <div class="home-section-heading">
+            <div>
+                <span class="home-eyebrow">CALCULADORA RÁPIDA</span>
+                <h1 id="calculadora-titulo">Estima el valor de tu pedido</h1>
+            </div>
+        </div>
+
+        <div class="quick-quote-grid">
+            <div class="quick-quote-controls">
+                <label for="quote-line">
+                    Línea del uniforme
+                    <select id="quote-line">
+                        <option value="basicos">Básicos — $55.000 por uniforme</option>
+                        <option value="pro">Pro — $65.000 por uniforme</option>
+                        <option value="doble-faz">Doble-faz — $78.000 por uniforme</option>
+                    </select>
+                </label>
+
+                <label for="quote-quantity">
+                    Cantidad de uniformes
+                    <input id="quote-quantity" type="number" min="6" max="500" step="1" value="6" inputmode="numeric">
+                </label>
+
+                <label class="quick-quote-neon" for="quote-neon">
+                    <input id="quote-neon" type="checkbox">
+                    <span>
+                        <strong>Agregar estilo neón</strong>
+                        <small>Disponible en amarillo o verde neón</small>
+                    </span>
+                </label>
+            </div>
+
+            <div class="quick-quote-result" aria-live="polite">
+                <span class="quick-quote-label">Estimación aproximada</span>
+                <strong id="quote-total">$330.000</strong>
+                <p id="quote-detail">6 uniformes Básicos · Sin neón</p>
+
+                <div class="quick-quote-payment">
+                    <div>
+                        <span>Anticipo 50%</span>
+                        <strong id="quote-deposit">$165.000</strong>
+                    </div>
+                    <div>
+                        <span>Saldo al estar listos</span>
+                        <strong id="quote-balance">$165.000</strong>
+                    </div>
+                </div>
+
+                <a class="btn-whatsapp" id="quote-whatsapp" href="https://wa.me/573238382435/?text=Hola%20YASA%20Sports%2C%20quiero%20cotizar%206%20uniformes%20B%C3%A1sicos%20sin%20estilo%20ne%C3%B3n.%20La%20estimaci%C3%B3n%20es%20de%20%23330.000." target="_blank" rel="noopener noreferrer">
+                    COTIZAR EN WHATSAPP
+                </a>
+            </div>
+        </div>
+
+        <p class="quick-quote-disclaimer">Estimación informativa. No incluye envío, el cual se cotiza según el destino. El pedido mínimo es de 6 uniformes.</p>
+    </section>
+
     <section class="home-services news-section" aria-labelledby="cotizacion-titulo">
         <div class="home-section-heading">
             <div>
@@ -96,6 +154,58 @@
 </main>
 
 <script>
+const quoteLines = {
+    basicos: { name: "Básicos", price: 55000, neon: 5000 },
+    pro: { name: "Pro", price: 65000, neon: 5000 },
+    "doble-faz": { name: "Doble-faz", price: 78000, neon: 10000 }
+};
+
+const quoteLine = document.getElementById("quote-line");
+const quoteQuantity = document.getElementById("quote-quantity");
+const quoteNeon = document.getElementById("quote-neon");
+
+function formatCop(value) {
+    return new Intl.NumberFormat("es-CO", {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
+    }).format(value);
+}
+
+function actualizarCotizacionRapida() {
+    const line = quoteLines[quoteLine.value];
+    let quantity = Number.parseInt(quoteQuantity.value, 10);
+
+    if (!Number.isFinite(quantity) || quantity < 6) {
+        quantity = 6;
+        quoteQuantity.value = "6";
+    } else if (quantity > 500) {
+        quantity = 500;
+        quoteQuantity.value = "500";
+    }
+
+    const neonCost = quoteNeon.checked ? line.neon : 0;
+    const unitPrice = line.price + neonCost;
+    const total = unitPrice * quantity;
+    const deposit = Math.ceil(total / 2);
+    const balance = total - deposit;
+    const neonText = quoteNeon.checked ? "Con estilo neón" : "Sin neón";
+
+    document.getElementById("quote-total").textContent = formatCop(total);
+    document.getElementById("quote-detail").textContent = `${quantity} uniformes ${line.name} · ${neonText}`;
+    document.getElementById("quote-deposit").textContent = formatCop(deposit);
+    document.getElementById("quote-balance").textContent = formatCop(balance);
+
+    const message = `Hola YASA Sports, quiero cotizar ${quantity} uniformes ${line.name} ${neonText === "Con estilo neón" ? "con estilo neón" : "sin estilo neón"}. La estimación aproximada es de ${formatCop(total)}.`;
+    document.getElementById("quote-whatsapp").href =
+        `https://wa.me/573238382435/?text=${encodeURIComponent(message)}`;
+}
+
+quoteLine.addEventListener("change", actualizarCotizacionRapida);
+quoteQuantity.addEventListener("input", actualizarCotizacionRapida);
+quoteNeon.addEventListener("change", actualizarCotizacionRapida);
+actualizarCotizacionRapida();
+
 function actualizarHoraLocal() {
     const reloj = document.getElementById("hora-local");
     if (!reloj) return;
