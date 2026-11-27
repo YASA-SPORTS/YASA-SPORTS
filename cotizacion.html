@@ -121,7 +121,10 @@
                 <div><dt>Ciudad o municipio</dt><dd id="summary-city">Por indicar</dd></div>
             </dl>
             <p class="quote-summary-shipping">El envío no está incluido; YASA lo cotizará según el destino.</p>
-            <button class="quote-share-button" id="quote-share" type="button">COMPARTIR RESUMEN</button>
+            <div class="quote-summary-actions">
+                <button class="quote-share-button" id="quote-share" type="button">COMPARTIR COMO MENSAJE</button>
+                <button class="quote-download-button" id="quote-download" type="button">DESCARGAR COMO IMAGEN</button>
+            </div>
             <p class="quote-share-status" id="quote-share-status" role="status" aria-live="polite"></p>
         </section>
 
@@ -232,6 +235,7 @@ const quoteCity = document.getElementById("quote-city");
 const decreaseQuantity = document.getElementById("quote-quantity-decrease");
 const increaseQuantity = document.getElementById("quote-quantity-increase");
 const quoteShare = document.getElementById("quote-share");
+const quoteDownload = document.getElementById("quote-download");
 const quoteShareStatus = document.getElementById("quote-share-status");
 
 function formatCop(value) {
@@ -325,6 +329,110 @@ quoteShare.addEventListener("click", async function () {
         if (error.name !== "AbortError") {
             quoteShareStatus.textContent = "No se pudo compartir automáticamente. Usa el botón de WhatsApp para enviar tu cotización.";
         }
+    }
+});
+
+quoteDownload.addEventListener("click", async function () {
+    try {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        if (!context) {
+            throw new Error("No se pudo preparar la imagen.");
+        }
+
+        canvas.width = 1080;
+        canvas.height = 1200;
+        const width = canvas.width;
+        const padding = 72;
+        function drawRoundedRectangle(x, y, rectangleWidth, rectangleHeight, radius) {
+            context.beginPath();
+            context.moveTo(x + radius, y);
+            context.lineTo(x + rectangleWidth - radius, y);
+            context.quadraticCurveTo(x + rectangleWidth, y, x + rectangleWidth, y + radius);
+            context.lineTo(x + rectangleWidth, y + rectangleHeight - radius);
+            context.quadraticCurveTo(x + rectangleWidth, y + rectangleHeight, x + rectangleWidth - radius, y + rectangleHeight);
+            context.lineTo(x + radius, y + rectangleHeight);
+            context.quadraticCurveTo(x, y + rectangleHeight, x, y + rectangleHeight - radius);
+            context.lineTo(x, y + radius);
+            context.quadraticCurveTo(x, y, x + radius, y);
+            context.closePath();
+        }
+
+        const summaryItems = [
+            ["LÍNEA Y CANTIDAD", document.getElementById("summary-line").textContent],
+            ["VALOR POR UNIFORME", document.getElementById("summary-unit-price").textContent],
+            ["ESTILO NEÓN", document.getElementById("summary-neon").textContent],
+            ["CIUDAD O MUNICIPIO", document.getElementById("summary-city").textContent]
+        ];
+
+        context.fillStyle = "#f5f6f8";
+        context.fillRect(0, 0, width, canvas.height);
+        context.fillStyle = "#ffde00";
+        context.fillRect(0, 0, width, 310);
+        context.fillStyle = "#111111";
+        context.font = "900 34px Arial";
+        context.fillText("YASA SPORTS", padding, 82);
+        context.font = "900 58px Arial";
+        context.fillText("RESUMEN DE COTIZACIÓN", padding, 172);
+        context.font = "28px Arial";
+        context.fillText("Estimación de tu pedido personalizado", padding, 228);
+
+        context.fillStyle = "#ffffff";
+        drawRoundedRectangle(padding, 350, width - padding * 2, 710, 28);
+        context.fill();
+
+        let itemY = 420;
+        summaryItems.forEach(function (item) {
+            context.fillStyle = "#667085";
+            context.font = "700 20px Arial";
+            context.fillText(item[0], padding + 36, itemY);
+            context.fillStyle = "#111111";
+            context.font = "700 30px Arial";
+            context.fillText(item[1], padding + 36, itemY + 42, width - padding * 2 - 72);
+            itemY += 90;
+        });
+
+        context.fillStyle = "#111111";
+        drawRoundedRectangle(padding + 28, 790, width - padding * 2 - 56, 230, 20);
+        context.fill();
+        context.fillStyle = "#ffde00";
+        context.font = "700 20px Arial";
+        context.fillText("ESTIMADO DE UNIFORMES", padding + 56, 840);
+        context.fillStyle = "#ffffff";
+        context.font = "900 54px Arial";
+        context.fillText(document.getElementById("summary-total").textContent, padding + 56, 910);
+        context.font = "24px Arial";
+        context.fillText(
+            `Anticipo: ${document.getElementById("summary-deposit").textContent}   ·   Saldo: ${document.getElementById("summary-balance").textContent}`,
+            padding + 56,
+            970,
+            width - padding * 2 - 112
+        );
+
+        context.fillStyle = "#667085";
+        context.font = "22px Arial";
+        context.fillText("El envío no está incluido; se cotiza según el destino.", padding, 1120, width - padding * 2);
+
+        const imageBlob = await new Promise(function (resolve) {
+            canvas.toBlob(resolve, "image/png");
+        });
+        if (!imageBlob) {
+            throw new Error("El navegador no pudo crear la imagen.");
+        }
+
+        const imageUrl = URL.createObjectURL(imageBlob);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = imageUrl;
+        downloadLink.download = "resumen-yasa-cotizacion.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        window.setTimeout(function () {
+            URL.revokeObjectURL(imageUrl);
+        }, 1000);
+        quoteShareStatus.textContent = "Imagen del resumen descargada.";
+    } catch (error) {
+        quoteShareStatus.textContent = "No se pudo descargar la imagen del resumen. Puedes compartirlo como mensaje.";
     }
 });
 actualizarCotizacionRapida();
