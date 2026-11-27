@@ -119,6 +119,57 @@
         </div>
     </section>
 
+    <section class="home-comparator" aria-labelledby="comparador-titulo">
+        <div class="home-section-heading">
+            <div>
+                <span class="home-eyebrow">COMPARA ANTES DE ELEGIR</span>
+                <h2 id="comparador-titulo">¿Qué línea necesita tu equipo?</h2>
+            </div>
+            <a href="cotizacion.html" class="text-link">Cotizar ahora →</a>
+        </div>
+
+        <div class="home-comparator-options" role="tablist" aria-label="Comparar líneas de uniformes">
+            <button class="comparator-option active" type="button" role="tab" aria-selected="true" data-line="basicos">
+                <span>01</span>
+                <strong>Básicos</strong>
+                <small>Esencial y funcional</small>
+            </button>
+            <button class="comparator-option" type="button" role="tab" aria-selected="false" data-line="pro">
+                <span>02</span>
+                <strong>Pro</strong>
+                <small>Máxima presencia</small>
+            </button>
+            <button class="comparator-option" type="button" role="tab" aria-selected="false" data-line="doble-faz">
+                <span>03</span>
+                <strong>Doble-faz</strong>
+                <small>Dos estilos en uno</small>
+            </button>
+        </div>
+
+        <div class="comparator-result" id="comparator-result" role="tabpanel" aria-live="polite">
+            <div class="comparator-result-main">
+                <span class="comparator-kicker">Recomendado para ti</span>
+                <h3 id="comparator-name">Uniforme Básicos</h3>
+                <p id="comparator-description">Una opción cómoda y funcional para comenzar con una identidad deportiva completa.</p>
+            </div>
+            <div class="comparator-details">
+                <div>
+                    <span>Ideal para</span>
+                    <strong id="comparator-ideal">Equipos que buscan una opción esencial</strong>
+                </div>
+                <div>
+                    <span>Lo que destaca</span>
+                    <strong id="comparator-highlight">Comodidad y versatilidad</strong>
+                </div>
+                <div>
+                    <span>Personalización</span>
+                    <strong id="comparator-custom">Diseño completo del uniforme</strong>
+                </div>
+            </div>
+            <a class="btn-yellow" id="comparator-link" href="basicos.html">VER BÁSICOS</a>
+        </div>
+    </section>
+
     <section class="home-process">
         <div class="home-section-heading">
             <div>
@@ -171,6 +222,59 @@
 
 
 <script>
+const comparador = {
+    basicos: {
+        name: "Uniforme Básicos",
+        description: "Una opción cómoda y funcional para comenzar con una identidad deportiva completa.",
+        ideal: "Equipos que buscan una opción esencial",
+        highlight: "Comodidad y versatilidad",
+        custom: "Diseño completo del uniforme",
+        link: "basicos.html",
+        label: "VER BÁSICOS"
+    },
+    pro: {
+        name: "Uniforme Pro",
+        description: "Una opción premium pensada para equipos que quieren una imagen más destacada y acabados profesionales.",
+        ideal: "Equipos que buscan presencia premium",
+        highlight: "Diseño y acabados de alto nivel",
+        custom: "Personalización con diseño seleccionado",
+        link: "pro.html",
+        label: "VER PRO"
+    },
+    "doble-faz": {
+        name: "Uniforme Doble-faz",
+        description: "Dos estilos en una misma prenda para ampliar las opciones de uso sin perder identidad.",
+        ideal: "Equipos que necesitan dos estilos",
+        highlight: "Versatilidad y doble presentación",
+        custom: "Dos diseños integrados en el uniforme",
+        link: "doble-faz.html",
+        label: "VER DOBLE-FAZ"
+    }
+};
+
+document.querySelectorAll(".comparator-option").forEach(function (option) {
+    option.addEventListener("click", function () {
+        document.querySelectorAll(".comparator-option").forEach(function (item) {
+            item.classList.remove("active");
+            item.setAttribute("aria-selected", "false");
+        });
+
+        option.classList.add("active");
+        option.setAttribute("aria-selected", "true");
+
+        const data = comparador[option.dataset.line];
+        document.getElementById("comparator-name").textContent = data.name;
+        document.getElementById("comparator-description").textContent = data.description;
+        document.getElementById("comparator-ideal").textContent = data.ideal;
+        document.getElementById("comparator-highlight").textContent = data.highlight;
+        document.getElementById("comparator-custom").textContent = data.custom;
+
+        const link = document.getElementById("comparator-link");
+        link.href = data.link;
+        link.textContent = data.label;
+    });
+});
+
 function actualizarHoraLocal() {
     const reloj = document.getElementById("hora-local");
     if (!reloj) return;
